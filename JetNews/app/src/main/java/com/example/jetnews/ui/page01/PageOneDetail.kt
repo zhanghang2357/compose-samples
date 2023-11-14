@@ -5,9 +5,13 @@ import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,6 +22,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -71,6 +76,8 @@ import com.example.jetnews.model.Post
 import com.example.jetnews.model.PostsFeed
 import com.example.jetnews.ui.components.JetnewsSnackbarHost
 import com.example.jetnews.ui.home.HomeUiState
+import com.example.jetnews.ui.home.PostCardHistory
+import com.example.jetnews.ui.home.PostCardPopular
 import com.example.jetnews.ui.home.PostCardSimple
 import com.example.jetnews.ui.modifiers.interceptKey
 import com.example.jetnews.ui.rememberContentPaddingForScreen
@@ -123,7 +130,7 @@ fun ArticleFeed(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun HomeScreenWithArticleList(
+fun HomeScreenWithArticleList(
     uiState: HomeUiState,
     showTopAppBar: Boolean,
     onRefreshPosts: () -> Unit,
@@ -347,18 +354,63 @@ fun PostList(
                 )
             }
         }
-//        if (postsFeed.popularPosts.isNotEmpty() && !showExpandedSearch) {
-//            item {
-//                PostListPopularSection(
-//                    postsFeed.popularPosts, onArticleTapped
-//                )
-//            }
-//        }
-//        if (postsFeed.recentPosts.isNotEmpty()) {
-//            item { PostListHistorySection(postsFeed.recentPosts, onArticleTapped) }
-//        }
+        if (postsFeed.popularPosts.isNotEmpty() && !showExpandedSearch) {
+            item {
+                PopularSection(
+                    postsFeed.popularPosts, onArticleTapped
+                )
+            }
+        }
+        if (postsFeed.recentPosts.isNotEmpty()) {
+            item { HistorySection(postsFeed.recentPosts, onArticleTapped) }
+        }
     }
 }
+
+@Composable
+fun HistorySection(
+    posts: List<Post>,
+    navigateToArticle: (String) -> Unit
+){
+    Column {
+        posts.forEach { post ->
+            PostCardHistory(post, navigateToArticle)
+            PostListDivider()
+        }
+    }
+}
+
+@Composable
+fun PopularSection(
+    posts: List<Post>,
+    navigateToArticle: (String) -> Unit
+){
+    Column {
+        Text(
+            modifier = Modifier.padding(16.dp),
+            text = stringResource(id = R.string.home_popular_section_title),
+            style = MaterialTheme.typography.titleLarge
+        )
+        Row(
+            modifier = Modifier
+                .horizontalScroll(rememberScrollState())
+                .height(IntrinsicSize.Max)
+                .padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            for (post in posts) {
+                PostCardPopular(
+                    post,
+                    navigateToArticle
+                )
+            }
+        }
+        Spacer(Modifier.height(16.dp))
+        PostListDivider()
+    }
+}
+
+
 
 
 @Composable

@@ -165,7 +165,7 @@ fun HomeFeedWithArticleDetailsScreen(
                 onSearchInputChanged = onSearchInputChanged,
             )
             // Crossfade between different detail posts
-            Crossfade(targetState = hasPostsUiState.selectedPost) { detailPost ->
+            Crossfade(targetState = hasPostsUiState.selectedPost, label = "") { detailPost ->
                 // Get the lazy list state for this detail view
                 val detailLazyListState by remember {
                     derivedStateOf {
@@ -207,7 +207,7 @@ fun HomeFeedWithArticleDetailsScreen(
 /**
  * A [Modifier] that tracks all input, and calls [block] every time input is received.
  */
-private fun Modifier.notifyInput(block: () -> Unit): Modifier =
+fun Modifier.notifyInput(block: () -> Unit): Modifier =
     composed {
         val blockState = rememberUpdatedState(block)
         pointerInput(Unit) {

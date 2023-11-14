@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.jetnews.Const.MAIN
 import com.example.jetnews.data.AppContainer
 import com.example.jetnews.ui.components.AppNavRail
 import com.example.jetnews.ui.theme.JetnewsTheme
@@ -49,11 +50,11 @@ fun JetnewsApp(
     widthSizeClass: WindowWidthSizeClass,
 ) {
     JetnewsTheme {
+        val t = MAIN
         val navController = rememberNavController()
         val navigationActions = remember(navController) {
             JetnewsNavigationActions(navController)
         }
-
         val coroutineScope = rememberCoroutineScope()
 
         val navBackStackEntry by navController.currentBackStackEntryAsState()

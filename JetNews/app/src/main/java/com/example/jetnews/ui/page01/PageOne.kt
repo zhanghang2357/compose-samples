@@ -59,10 +59,7 @@ fun PageOne(
         }
     }
     when (getHomeScreenType(isExpandedScreen, uiState)) {
-        PageType.FeedWithArticleDetails ->{
-            Log.d("PageOne","PageType.FeedWithArticleDetails")
-            Text("摘要和详情")
-        }
+
         PageType.Feed ->{
             Log.d("PageOne","PageType.Feed")
             ArticleFeed(
@@ -79,9 +76,43 @@ fun PageOne(
             )
 
         }
+
+        PageType.FeedWithArticleDetails ->{
+            FeedAndDetail(
+                uiState = uiState,
+                showTopAppBar = !isExpandedScreen,
+                onToggleFavorite = onToggleFavorite,
+                onSelectPost = onSelectPost,
+                onRefreshPosts = onRefreshPosts,
+                onErrorDismiss = onErrorDismiss,
+                onInteractWithList = onInteractWithFeed,
+                onInteractWithDetail = onInteractWithArticleDetails,
+                openDrawer = openDrawer,
+                homeListLazyListState = homeListLazyListState,
+                articleDetailLazyListStates = articleDetailLazyListStates,
+                snackbarHostState = snackbarHostState,
+                onSearchInputChanged = onSearchInputChanged,
+            )
+            Log.d("PageOne","PageType.FeedWithArticleDetails")
+
+        }
+
         PageType.ArticleDetails ->{
+            check(uiState is HomeUiState.HasPosts)
+
             Log.d("PageOne","PageType.ArticleDetails")
-            Text("详情")
+            Detail(
+                post = uiState.selectedPost,
+                isExpandedScreen = isExpandedScreen,
+                onBack = onInteractWithFeed,
+                isFavorite = uiState.favorites.contains(uiState.selectedPost.id),
+                onToggleFavorite = {
+                    onToggleFavorite(uiState.selectedPost.id)
+                },
+                lazyListState = articleDetailLazyListStates.getValue(
+                    uiState.selectedPost.id
+                )
+            )
         }
     }
 
