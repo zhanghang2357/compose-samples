@@ -41,6 +41,7 @@
     <string name="home_post_min_read">%1$s - %2$d min read</string>
     <string name="home_post_based_on_history">BASED ON YOUR HISTORY</string>
     <string name="home_search">Search articles</string>
+    <string name="home_search_v2">搜索文章</string>
 
     <!-- Article Screen -->
     <string name="article_functionality_not_available">Functionality not available \uD83D\uDE48</string>

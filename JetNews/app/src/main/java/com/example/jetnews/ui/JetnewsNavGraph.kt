@@ -19,6 +19,7 @@ package com.example.jetnews.ui
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -26,6 +27,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navDeepLink
+import com.example.jetnews.Const.NAV_GRAPH
 import com.example.jetnews.JetnewsApplication.Companion.JETNEWS_APP_URI
 import com.example.jetnews.R
 import com.example.jetnews.data.AppContainer
@@ -33,8 +35,10 @@ import com.example.jetnews.ui.home.HomeRoute
 import com.example.jetnews.ui.home.HomeViewModel
 import com.example.jetnews.ui.interests.InterestsRoute
 import com.example.jetnews.ui.interests.InterestsViewModel
+import com.example.jetnews.ui.page01.PageOne
 
 const val POST_ID = "postId"
+
 
 @Composable
 fun JetnewsNavGraph(
@@ -45,6 +49,7 @@ fun JetnewsNavGraph(
     openDrawer: () -> Unit = {},
     startDestination: String = JetnewsDestinations.HOME_ROUTE,
 ) {
+    modifier.testTag(NAV_GRAPH)
     NavHost(
         navController = navController,
         startDestination = startDestination,
@@ -81,9 +86,30 @@ fun JetnewsNavGraph(
                 openDrawer = openDrawer
             )
         }
-        composable(JetnewsDestinations.PAGE_ONE) {
-            Text(text = stringResource(id = R.string.page_one))
+
+//       这里是模拟数据。
+
+        composable(route = JetnewsDestinations.PAGE_ONE,
+            deepLinks = listOf(
+                navDeepLink {
+                    uriPattern =
+                        "$JETNEWS_APP_URI/${JetnewsDestinations.HOME_ROUTE}?$POST_ID={$POST_ID}"
+                }
+            )
+        ) { navBackStackEntry ->
+
+            val mViewModel:HomeViewModel = viewModel(
+                factory = HomeViewModel.provideFactory(postsRepository = appContainer.postsRepository,
+                    preSelectedPostId = navBackStackEntry.arguments?.getString(POST_ID))
+            )
+
+            PageOne(homeViewModel = mViewModel,
+                isExpandedScreen = isExpandedScreen,
+                openDrawer = openDrawer,)
+
         }
+
+
         composable(JetnewsDestinations.PAGE_TWO) {
             Text(text = stringResource(id = R.string.page_two))
         }
