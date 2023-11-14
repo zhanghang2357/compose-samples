@@ -33,6 +33,8 @@
 
     <!-- Home Screen -->
     <string name="home_title">Home</string>
+    <string name="drawer_page1">page01</string>
+    <string name="drawer_page2">page02</string>
     <string name="home_tap_to_load_content">Tap to load content</string>
     <string name="home_top_section_title">Top stories for you</string>
     <string name="home_popular_section_title">Popular on Jetnews</string>
@@ -55,5 +57,11 @@
     <string name="cd_navigate_up">Navigate up</string>
     <string name="cd_navigate_home">Navigate to the home screen</string>
     <string name="cd_navigate_interests">Navigate to the interests screen</string>
+
+
+    <string name="page_one">this is page one</string>
+    <string name="page_two">this is page two</string>
+
+
 
 </resources>

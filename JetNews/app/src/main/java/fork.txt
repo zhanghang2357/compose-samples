@@ -1,0 +1,2 @@
+1.使用MutableStateFlow
+2.使用nav和navGraph

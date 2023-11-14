@@ -23,6 +23,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.HomeWork
+import androidx.compose.material.icons.filled.Hotel
 import androidx.compose.material.icons.filled.ListAlt
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -33,6 +35,7 @@ import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,6 +49,8 @@ fun AppDrawer(
     currentRoute: String,
     navigateToHome: () -> Unit,
     navigateToInterests: () -> Unit,
+    navigateToPage1: () -> Unit,
+    navigateToPage2: () -> Unit,
     closeDrawer: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -67,7 +72,22 @@ fun AppDrawer(
             onClick = { navigateToInterests(); closeDrawer() },
             modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
         )
+        NavigationDrawerItem(
+            label = { Text(stringResource(id = R.string.drawer_page1)) },
+            icon = { Icon(Icons.Filled.HomeWork, null) },
+            selected = currentRoute == JetnewsDestinations.PAGE_ONE,
+            onClick = { navigateToPage1(); closeDrawer() },
+            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+        )
+        NavigationDrawerItem(
+            label = { Text(stringResource(id = R.string.drawer_page2)) },
+            icon = { Icon(Icons.Filled.Hotel, null) },
+            selected = currentRoute == JetnewsDestinations.PAGE_TWO,
+            onClick = { navigateToPage2(); closeDrawer() },
+            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+        )
     }
+
 }
 
 @Composable
@@ -87,6 +107,24 @@ private fun JetNewsLogo(modifier: Modifier = Modifier) {
     }
 }
 
+@Composable
+private fun NewLogo(modifier: Modifier = Modifier){
+    Row(modifier = modifier) {
+        Icon(
+            painterResource(R.drawable.ic_jetnews_logo),
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary
+        )
+        Spacer(Modifier.width(8.dp))
+        Text(text = stringResource(id = R.string.app_name))
+//        Icon(
+//            painter = painterResource(R.drawable.ic_jetnews_wordmark),
+//            contentDescription = stringResource(R.string.app_name),
+//            tint = MaterialTheme.colorScheme.onSurfaceVariant
+//        )
+    }
+}
+
 @Preview("Drawer contents")
 @Preview("Drawer contents (dark)", uiMode = UI_MODE_NIGHT_YES)
 @Composable
@@ -96,6 +134,8 @@ fun PreviewAppDrawer() {
             currentRoute = JetnewsDestinations.HOME_ROUTE,
             navigateToHome = {},
             navigateToInterests = {},
+            navigateToPage1 = {},
+            navigateToPage2 = {},
             closeDrawer = { }
         )
     }
